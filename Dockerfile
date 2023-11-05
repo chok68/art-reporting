@@ -1,6 +1,5 @@
 # Docker file for Ubuntu with OpenJDK 18 and Tomcat 9.
-FROM ubuntu:latest
-LABEL maintainer="Karl Hill <karl.hill@nasa.gov>"
+FROM ubuntu:22.04
 
 # Set environment variables
 ENV TOMCAT_VERSION 9.0.71
@@ -12,8 +11,14 @@ ENV PATH $CATALINA_HOME/bin:$PATH
 RUN apt-get -y update && apt-get -y upgrade
 RUN apt-get -y install openjdk-18-jdk wget
 
+# Add user
+RUN useradd -r -m -U -d $CATALINA_HOME -s /bin/false tomcat
+RUN whoami \
+	&& ls -l $CATALINA_HOME/..
+
 # Install and configure Tomcat.
-RUN mkdir $CATALINA_HOME
+USER tomcat
+RUN mkdir -p $CATALINA_HOME
 RUN wget https://archive.apache.org/dist/tomcat/tomcat-9/v${TOMCAT_VERSION}/bin/apache-tomcat-${TOMCAT_VERSION}.tar.gz -O /tmp/tomcat.tar.gz
 RUN cd /tmp && tar xvfz tomcat.tar.gz
 RUN cp -Rv /tmp/apache-tomcat-${TOMCAT_VERSION}/* $CATALINA_HOME
