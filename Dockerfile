@@ -1,5 +1,7 @@
 # Docker file for Ubuntu with OpenJDK 18 and Tomcat 9.
 FROM ubuntu:latest
+USER root
+RUN whoami
 LABEL maintainer="Karl Hill <karl.hill@nasa.gov>"
 
 # Set environment variables
