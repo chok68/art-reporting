@@ -1,7 +1,5 @@
 # Docker file for Ubuntu with OpenJDK 18 and Tomcat 9.
 FROM ubuntu:latest
-USER root
-RUN whoami
 LABEL maintainer="Karl Hill <karl.hill@nasa.gov>"
 
 # Set environment variables
@@ -22,8 +20,16 @@ RUN cp -Rv /tmp/apache-tomcat-${TOMCAT_VERSION}/* $CATALINA_HOME
 RUN rm -rf /tmp/apache-tomcat-${TOMCAT_VERSION}
 RUN rm -rf /tmp/tomcat.tar.gz
 
-# Expose Tomcat port.
-EXPOSE 80
+#Add a user ubuntu with UID 1001
+RUN useradd -rm -d /home/ubuntu -s /bin/bash -g root -G sudo -u 1001 ubuntu && \
+   chown -R ubuntu:root $CATALINA_HOME && \
+   chgrp -R 0 $CATALINA_HOME && \
+   chmod -R g=u $CATALINA_HOME
+
+#Specify the user with UID
+USER 1001
+
+EXPOSE 8080
 
 # Start Tomcat
 CMD ["/usr/local/tomcat/bin/catalina.sh", "run"]
