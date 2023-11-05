@@ -27,11 +27,6 @@ RUN unzip -q art-7.12.zip \
 	&& cp art-7.12/art.war $CATALINA_HOME/webapps/. \
 	&& rm -rf art-7.12*
 
-# RUN curl https://kumisystems.dl.sourceforge.net/project/art/art/7.12/art-7.12.zip -o /tmp/art-7.12.zip
-# RUN cd /tmp && unzip -q art-7.12.zip
-# RUN cp /tmp/art-7.12/art.war $CATALINA_HOME/webapps/.
-# RUN rm -rf /tmp/art-7.12*
-
 #Add a user ubuntu with UID 1001
 RUN useradd -rm -d /home/ubuntu -s /bin/bash -g root -G sudo -u 1001 ubuntu && \
    chown -R ubuntu:root $CATALINA_HOME && \
